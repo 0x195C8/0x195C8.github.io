@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en-us"><head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <meta name="description" content="Motivation Of course, Android Studio is the best IDE to edit/debug Android native code. However, it only allow to debug code packaged in an APK file. If we have an idea/prototype which needs to implement using native code, in order to use debug functions provided by Android Studio we have to add some Java/JNI template code like System.loadLibaray(). Now let&rsquo;s stop and think for a while. Can we just write a simple main() method and fill our prototype code, then press F5 to debug like normal desktop app development?">  
+
+  <title>
+    
+      Android Native Code Development in Visual Studio Code (1)
+    
+  </title>
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/" />
+  
+  
+  
+  <link rel="stylesheet" href="/css/main.ebe15b0394daa6798b8a40aa572a71b5a7a1beb8cc02c392f5c142e7d08ddb6052e049639385106440b538f394884685082b7441eef27a6a8315ec723155dc15.css" integrity="sha512-6&#43;FbA5TapnmLikCqVypxtaehvrjMAsOS9cFC59CN22BS4Eljk4UQZEC1OPOUiEaFCCt0Qe7yemqDFexyMVXcFQ==" />
+  
+</head>
+<body a="auto">
+        <main class="page-content" aria-label="Content">
+            <div class="w">
+<a href="/">..</a>
+
+<article>
+    <p class="post-meta">
+        <time datetime="2023-02-12 15:54:57 &#43;0800 CST">
+            2023-02-12
+        </time>
+    </p>
+
+    <h1>Android Native Code Development in Visual Studio Code (1)</h1>
+
+    <h2 id="motivation">Motivation</h2>
+<p>Of course, Android Studio is the best IDE to edit/debug Android native code. However, it only allow to debug code packaged in an APK file. If we have an idea/prototype which needs to implement using native code, in order to use debug functions provided by Android Studio we have to add some Java/JNI template code like <code>System.loadLibaray()</code>. Now let&rsquo;s stop and think for a while. Can we just write a simple <code>main()</code> method and fill our prototype code, then press <code>F5</code> to debug like normal desktop app development? The answer is <code>YES</code>.
+I plan to write three posts about this topic. The first one (this one) we discuss the prerequisties and procedures to setup native code editing in Visual Studio Code.</p>
+<h2 id="prerequisties">Prerequisties</h2>
+<p>My laptop is MacBook, so this post describes how to setup native code editing in Visual Studio Code on macOS. If your OS is Windows or Linux, you should follow this post with some custom platform modifications.
+Of course, the <a href="https://code.visualstudio.com/">Visual Studio Code</a> app you should download and install on your computer, and C/C++ extension should also be installed which I highly recommend the <code>C/C++ Extension Pack</code>.
+To enable complie and link native code, the <a href="https://developer.android.google.cn/ndk/downloads">Android NDK</a> should be installed as well. You can download and install Android NDK manually or use the Android SDK Manager provided by Android Studio. We usually need two functionalities to write code: <code>Import Library</code> and <code>Auto Completion</code>. Let’s see how to configure in Visual Studio Code.</p>
+<h2 id="configurations">Configurations</h2>
+<p>Our program always need to use system library or third-party library. We need to inlcude library header files like <code>#include &lt;stdio.h&gt;</code>, but where does Visual Studio Code find these header files? Because our program is compiled in laptop but run in android device, which called <a href="https://en.wikipedia.org/wiki/Cross_compiler">Cross compiler</a>. So our program should compiled or linked with libraries in android device which Android NDK offers. but how?
+Let’s create a sample project (<code>~/android-native-code</code>) to illustrate these concepts.
+First of all, we should configure C/C++ extensions. Open Command Palette (⇧⌘P), select <code>C/C++: Edit Configurations (JSON)</code>, after select this menu item, Visual Studio Code create a JSON file named <code>c_cpp_properties.json</code> for us in directory <code>~/android-native-code/.vscode/</code>.
+<img src="/images/20230210232222.jpg" alt="">
+If you don’t see this file, and an error shows like that:
+<img src="/images/20230212101439.jpg" alt="">
+It seems that your Visual Studio Code settings file has an item <code>&quot;C_Cpp.intelliSenseEngine&quot;: &quot;Disabled&quot;</code>, you should change the value <code>Disabled</code> to <code>default</code>. The Visual Studio Code settings file ususally stays at <code>~/Library/Application Support/Code/User/settings.json</code>, or you can open Command Palette (⇧⌘P) and input <code>show settings</code> to view and modify it.
+<img src="/images/20230212105927.jpg" alt="">
+If all the steps above are taken, now you have a <code>c_cpp_properties.json</code>. Open it and add the following configurations:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Android&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;includePath&#34;</span>: [
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;${workspaceFolder}/**&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;${env:ANDROID_NDK_HOME}/sysroot/usr/include/**&#34;</span>
+</span></span><span style="display:flex;"><span>  ],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;defines&#34;</span>: [],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;compilerPath&#34;</span>:<span style="color:#e6db74">&#34;${env:ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;cStandard&#34;</span>: <span style="color:#e6db74">&#34;c11&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;cppStandard&#34;</span>: <span style="color:#e6db74">&#34;c++11&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;intelliSenseMode&#34;</span>: <span style="color:#e6db74">&#34;clang-x64&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;configurationProvider&#34;</span>: <span style="color:#e6db74">&#34;ms-vscode.cmake-tools&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><code>ANDROID_NDK_HOME</code> in above code snippest is an environment variable which value is the location of Android NDK install directory. The complete references you may visit <a href="https://code.visualstudio.com/docs/cpp/c-cpp-properties-schema-reference">C/C++ properties schema references</a>.
+Now you can edit C/C++ code in Visual Studio Code, you can include system library header files, and code auto completion is also available. If not, you may restart Visual Studio Code once.
+Ok, this post we talk about setup editing native code in Visual Studio Code, the following two post we will foucs on how to enable execute and debug funtions. See you later.</p>
+
+</article>
+
+            </div>
+        </main>
+    </body></html>

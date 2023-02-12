@@ -8,6 +8,15 @@
     <language>en-us</language>
     <lastBuildDate>Thu, 25 Aug 2022 21:30:04 +0800</lastBuildDate><atom:link href="http://0x195C8.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Android Native Code Development in Visual Studio Code (1)</title>
+      <link>http://0x195C8.github.io/posts/android-native-code-vscode/</link>
+      <pubDate>Sun, 12 Feb 2023 15:54:57 +0800</pubDate>
+      
+      <guid>http://0x195C8.github.io/posts/android-native-code-vscode/</guid>
+      <description>Motivation Of course, Android Studio is the best IDE to edit/debug Android native code. However, it only allow to debug code packaged in an APK file. If we have an idea/prototype which needs to implement using native code, in order to use debug functions provided by Android Studio we have to add some Java/JNI template code like System.loadLibaray(). Now let&amp;rsquo;s stop and think for a while. Can we just write a simple main() method and fill our prototype code, then press F5 to debug like normal desktop app development?</description>
+    </item>
+    
+    <item>
       <title>Hello Github Pages</title>
       <link>http://0x195C8.github.io/posts/first/</link>
       <pubDate>Wed, 08 Feb 2023 15:54:57 +0800</pubDate>
