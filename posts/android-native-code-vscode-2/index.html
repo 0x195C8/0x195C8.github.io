@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en-us"><head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <meta name="description" content="In last post we have talked about how to set up editing android native code in Visual Studio Code. In this post we will talk about how to build our program with cmake and Cmake Tools extension.
+Our Goal In general, our program will run as follows. Firstly, we edit source code, then we need a complier to complie our source code to binary of our target devices which is android platform.">  
+
+  <title>
+    
+      Android Native Code Development in Visual Studio Code (2)
+    
+  </title>
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/" />
+  
+  
+  
+  <link rel="stylesheet" href="/css/main.ebe15b0394daa6798b8a40aa572a71b5a7a1beb8cc02c392f5c142e7d08ddb6052e049639385106440b538f394884685082b7441eef27a6a8315ec723155dc15.css" integrity="sha512-6&#43;FbA5TapnmLikCqVypxtaehvrjMAsOS9cFC59CN22BS4Eljk4UQZEC1OPOUiEaFCCt0Qe7yemqDFexyMVXcFQ==" />
+  
+</head>
+<body a="auto">
+        <main class="page-content" aria-label="Content">
+            <div class="w">
+<a href="/">..</a>
+
+<article>
+    <p class="post-meta">
+        <time datetime="2023-02-15 20:01:57 &#43;0800 CST">
+            2023-02-15
+        </time>
+    </p>
+
+    <h1>Android Native Code Development in Visual Studio Code (2)</h1>
+
+    <p>In <a href="/posts/android-native-code-vscode-1">last post</a> we have talked about how to set up editing android native code in Visual Studio Code. In this post we will talk about how to build our program with cmake and <code>Cmake Tools</code> extension.</p>
+<h2 id="our-goal">Our Goal</h2>
+<p>In general, our program will run as follows. Firstly, we edit source code, then we need a complier to complie our source code to binary of our target devices which is android platform. Then we need to push the output binary to an executable path on the device like <code>/data/local/tmp/</code> using <code>adb</code>. And we need to change the executable permission of the uploaded binary by <code>adb shell chmod</code>.  After that we can use <code>adb shell /data/local/tmp/&lt;binary&gt;</code> to run our program. In order to debug our program, we need to push <code>gdbserver</code> to the device which locates at <code>$ANDROID_NDK_HOME/prebuilt/&lt;target platform abi&gt;/gdbserver/gdbserver</code> and start our program by <code>gdbserver</code> for remote debug.</p>
+<h2 id="configure-cmake-toolchain">Configure CMake Toolchain</h2>
+<p>Let&rsquo;s break down the above steps. First, we need to configure our compiler toolchains. There are two ways to build android native code: cmake and ndk-build. We choose cmake in this post which is modern and friendly. To use cmake, we first need to install it. You can install manually or use the Android SDK Manager provided by Android Studio. I choose the latter. After installation, cmake stays at <code>$HOME/Library/Android/sdk/cmake</code>. For convenience, we can put the cmake bin directory <code>$HOME/Library/Android/sdk/cmake/&lt;cmake version&gt;/bin</code> to <code>$PATH</code> environment variable. In <a href="/posts/android-native-code-vscode-1">last post</a> we metioned the concept <a href="https://en.wikipedia.org/wiki/Cross_compiler">Cross compiler</a>. Our code is compiled in our development laptop but the compiled result (target) needs to run on the android devices. To achieve this, we need to tell cmake to use the Android NDK toolchain by define <code>CMAKE_TOOLCHAIN_FILE=$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake</code>. The toolchain file tells cmake how to compile and link our code. To use cmake in Visual Studio Code, we need to install <code>CMake Tools</code> extension. If you have followed the <a href="/posts/android-native-code-vscode-1">last post</a> instructions and installed <code>C/C++ Extension Pack</code>, now the <code>CMake Tools</code> extension is already installed. Otherwise, you may install this extension manually. And then we need to configure <a href="https://github.com/microsoft/vscode-cmake-tools/blob/main/docs/kits.md">CMake kits</a> to use our toolchain file. There are two places you can configure: <code>$HOME/.local/share/CMakeTools/cmake-tools-kits.json</code> and <code>.vscode/cmake-kits.json</code> in project root directory. The first is available for all projects that use CMake Tools, and the latter only works in project locally. Make your choice and modify the file with content:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>[
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Android Build Toolchain&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;toolchainFile&#34;</span>: <span style="color:#e6db74">&#34;${env:ANDROID_NDK_HOME}/build/cmake/android.toolchain.cmake&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>]
+</span></span></code></pre></div><h2 id="build-our-project">Build Our Project</h2>
+<p>Now we can use cmake to build our project. Let&rsquo;s demo with an simple project. Open the Command Palette (⇧⌘P) and run the <code>CMake: Quick Start</code> command. Enter a project name: <code>android-native-code</code>. This will be written to CMakeLists.txt and a few initial source files.Next, select <code>Executable</code> as the project type to create a main.cpp that includes a basic main() function. This creates a project containing <code>main.cpp</code>, <code>CMakeLists.txt,</code> and a folder named <code>build</code> for your build files.
+Now we can build our project by pressing <code>F7</code>, and the result binary <code>android-native-code</code> should be presented in <code>build</code> directory. If some things go wrong, make sure the <code>active kits</code> shown in the Status bar is our configured toolchain <code>Android Build Toolchain</code>. We can push the result binary to an android device and run, and <code>Hello world!</code> should be printed in the console.Be aware that we don&rsquo;t configure some mandatory variables like <code>ANDROID_PLATFORM</code> and <code>ANDROID_ABI</code>, these variables are set to the default values in the toolchain file. If you want to build a target which needs to run <code>arm64-v8a</code> ABI, you should modify the <code>settings.json</code> we mentioned in <a href="/posts/android-native-code-vscode-1">last post</a> and add the following content:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span><span style="color:#e6db74">&#34;cmake.configureArgs&#34;</span><span style="color:#960050;background-color:#1e0010">:</span> [
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;-DANDROID_ABI=arm64-v8a&#34;</span>
+</span></span><span style="display:flex;"><span>    ]
+</span></span></code></pre></div><p>We are one step closer to our goal now. In the next post, we will talk about how to run and debug our program in Visual Studio Code. See you next time.</p>
+
+</article>
+
+            </div>
+        </main>
+    </body></html>

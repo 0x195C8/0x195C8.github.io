@@ -6,13 +6,23 @@
     <description>Recent content in Posts on 0x195C8</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 12 Feb 2023 15:54:57 +0800</lastBuildDate><atom:link href="http://0x195C8.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 15 Feb 2023 20:01:57 +0800</lastBuildDate><atom:link href="http://0x195C8.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Android Native Code Development in Visual Studio Code (2)</title>
+      <link>http://0x195C8.github.io/posts/android-native-code-vscode-2/</link>
+      <pubDate>Wed, 15 Feb 2023 20:01:57 +0800</pubDate>
+      
+      <guid>http://0x195C8.github.io/posts/android-native-code-vscode-2/</guid>
+      <description>In last post we have talked about how to set up editing android native code in Visual Studio Code. In this post we will talk about how to build our program with cmake and Cmake Tools extension.
+Our Goal In general, our program will run as follows. Firstly, we edit source code, then we need a complier to complie our source code to binary of our target devices which is android platform.</description>
+    </item>
+    
     <item>
       <title>Android Native Code Development in Visual Studio Code (1)</title>
-      <link>http://0x195C8.github.io/posts/android-native-code-vscode/</link>
+      <link>http://0x195C8.github.io/posts/android-native-code-vscode-1/</link>
       <pubDate>Sun, 12 Feb 2023 15:54:57 +0800</pubDate>
       
-      <guid>http://0x195C8.github.io/posts/android-native-code-vscode/</guid>
+      <guid>http://0x195C8.github.io/posts/android-native-code-vscode-1/</guid>
       <description>Motivation Of course, Android Studio is the best IDE to edit/debug Android native code. However, it only allow to debug code packaged in an APK file. If we have an idea/prototype which needs to implement using native code, in order to use debug functions provided by Android Studio we have to add some Java/JNI template code like System.loadLibaray(). Now let&amp;rsquo;s stop and think for a while. Can we just write a simple main() method and fill our prototype code, then press F5 to debug like normal desktop app development?</description>
     </item>
     
