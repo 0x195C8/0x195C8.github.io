@@ -8,6 +8,16 @@
     <language>en-us</language>
     <lastBuildDate>Thu, 25 Aug 2022 21:30:04 +0800</lastBuildDate><atom:link href="http://0x195C8.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Android Native Code Development in Visual Studio Code (3)</title>
+      <link>http://0x195C8.github.io/posts/android-native-code-vscode-3/</link>
+      <pubDate>Thu, 16 Feb 2023 21:54:57 +0800</pubDate>
+      
+      <guid>http://0x195C8.github.io/posts/android-native-code-vscode-3/</guid>
+      <description>In previous two posts 1 2 we have talked about how to edit Android native code in Visual Studio Code with code completions and how to build our project with Cmake Tools extension. In this post we will learn how to run and debug our program in Visual Studio Code, which is the last post of this topic.
+Run &amp;amp; Debug Configruation If we click the Run and Debug button in the left Side Bar, Visual Studio Code will tell us that he doesn&amp;rsquo;t know how to run our program yet and we need to do some configurations before running our program.</description>
+    </item>
+    
+    <item>
       <title>Android Native Code Development in Visual Studio Code (2)</title>
       <link>http://0x195C8.github.io/posts/android-native-code-vscode-2/</link>
       <pubDate>Wed, 15 Feb 2023 20:01:57 +0800</pubDate>
@@ -24,16 +34,6 @@ Our Goal In general, our program will run as follows. Firstly, we edit source co
       
       <guid>http://0x195C8.github.io/posts/android-native-code-vscode-1/</guid>
       <description>Motivation Of course, Android Studio is the best IDE to edit/debug Android native code. However, it only allow to debug code packaged in an APK file. If we have an idea/prototype which needs to implement using native code, in order to use debug functions provided by Android Studio we have to add some Java/JNI template code like System.loadLibaray(). Now let&amp;rsquo;s stop and think for a while. Can we just write a simple main() method and fill our prototype code, then press F5 to debug like normal desktop app development?</description>
-    </item>
-    
-    <item>
-      <title>Android Native Code Development in Visual Studio Code (3)</title>
-      <link>http://0x195C8.github.io/posts/android-native-code-vscode-3/</link>
-      <pubDate>Sun, 12 Feb 2023 15:54:57 +0800</pubDate>
-      
-      <guid>http://0x195C8.github.io/posts/android-native-code-vscode-3/</guid>
-      <description>In previous two posts 1 2 we have talked about how to edit Android native code in Visual Studio Code with code completions and how to build our project with Cmake Tools extension. In this post we will learn how to run and debug our program in Visual Studio Code, which is the last post of this topic.
-Run &amp;amp; Debug Configruation If we click the Run and Debug button in the left Side Bar, Visual Studio Code will tell us that he doesn&amp;rsquo;t know how to run our program yet and we need to do some configurations before running our program.</description>
     </item>
     
     <item>
