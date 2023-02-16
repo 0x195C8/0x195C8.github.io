@@ -27,6 +27,16 @@ Our Goal In general, our program will run as follows. Firstly, we edit source co
     </item>
     
     <item>
+      <title>Android Native Code Development in Visual Studio Code (3)</title>
+      <link>http://0x195C8.github.io/posts/android-native-code-vscode-3/</link>
+      <pubDate>Sun, 12 Feb 2023 15:54:57 +0800</pubDate>
+      
+      <guid>http://0x195C8.github.io/posts/android-native-code-vscode-3/</guid>
+      <description>In previous two posts 1 2 we have talked about how to edit Android native code in Visual Studio Code with code completions and how to build our project with Cmake Tools extension. In this post we will learn how to run and debug our program in Visual Studio Code, which is the last post of this topic.
+Run &amp;amp; Debug Configruation If we click the Run and Debug button in the left Side Bar, Visual Studio Code will tell us that he doesn&amp;rsquo;t know how to run our program yet and we need to do some configurations before running our program.</description>
+    </item>
+    
+    <item>
       <title>Hello Github Pages</title>
       <link>http://0x195C8.github.io/posts/first/</link>
       <pubDate>Wed, 08 Feb 2023 15:54:57 +0800</pubDate>
