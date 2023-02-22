@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en-us"><head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <meta name="description" content="In WWDC2020 Session 10159 the speaker introduced us the Endpoint Security Framework. The demo code SampleEndpointApp mentioned in video can be downloaded here. In this post, we will talk about how to build and run the demo on your computer. I have tried many times until the demo works normally. So I decide to write down the problems and solutions. Maybe this post can help someone else in the world.">  
+
+  <title>
+    
+      Build &amp; Run WWDC2020-10159 SampleEndpointApp
+    
+  </title>
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/" />
+  
+  
+  
+  <link rel="stylesheet" href="/css/main.898435bf248def0b77b9c69aa78e3e86c2f242b660a1243911da1cf5b8acaa9e75d24f1f15b3a632ed7c18347d00ab316033c84be609de4fcece3c84d762df6e.css" integrity="sha512-iYQ1vySN7wt3ucaap44&#43;hsLyQrZgoSQ5Edoc9bisqp510k8fFbOmMu18GDR9AKsxYDPIS&#43;YJ3k/OzjyE12Lfbg==" />
+  
+</head>
+<body a="auto">
+        <main class="page-content" aria-label="Content">
+            <div class="w">
+<a href="/">..</a>
+
+<article>
+    <p class="post-meta">
+        <time datetime="2023-02-22 14:54:57 &#43;0800 CST">
+            2023-02-22
+        </time>
+    </p>
+
+    <h1>Build &amp; Run WWDC2020-10159 SampleEndpointApp</h1>
+
+    <p>In <a href="https://developer.apple.com/videos/play/wwdc2020/10159/">WWDC2020 Session 10159</a> the speaker introduced us the <a href="https://developer.apple.com/documentation/endpointsecurity">Endpoint Security Framework</a>. The demo code <code>SampleEndpointApp</code> mentioned in video can be downloaded <a href="https://docs-assets.developer.apple.com/published/67380d0c59/MonitoringSystemEventsWithEndpointSecurity.zip">here</a>. In this post, we will talk about how to build and run the demo on your computer. I have tried many times until the demo works normally. So I decide to write down the problems and solutions. Maybe this post can help someone else in the world.</p>
+<h1 id="configuratioin">Configuratioin</h1>
+<p>There is a very useful <code>README.md</code> in the project root directory which you should read very carefully. If you miss any one step, you will be fail.</p>
+<blockquote>
+<ol>
+<li>Generate your Developer ID certificate. Refer to Developer ID for instructions.</li>
+</ol>
+</blockquote>
+<p>I think this step you have already done, so we just pass.</p>
+<blockquote>
+<ol start="2">
+<li>Request the Endpoint Security entitlement; see System Extensions and DriverKit.</li>
+</ol>
+</blockquote>
+<p>This step is critical. I spent one day before I realized that I missed this configuration. The system extension will not run if this entitlement is not set even through the extension is installed in system. So how to set this entitlement? First, visit the <a href="https://developer.apple.com/account/resources/identifiers/list">Apple develper</a> website and register a new <code>App ID</code>. You can set the <code>Bundle ID</code> with <code>com.example.apple-samplecode.SampleEndpointApp.Extension</code> as the document does, or you can set anything you like. In the <code>Capabilities</code> and <code>Additional Capabilities</code> tab, make sure you have the <code>System Extension</code> and <code>Endpoint Security</code> checkboxes checked.
+<img src="/images/system-extension.jpg" alt="">
+<img src="/images/es.jpg" alt=""></p>
+<blockquote>
+<ol start="3">
+<li>In Xcode, build and sign both the app and the extension with your Developer provisioning profile.</li>
+</ol>
+</blockquote>
+<p>Set the bundle id and certificate created in step 1 and 2 in Xcode. If everything goes well, now you can build the project.</p>
+<blockquote>
+<ol start="4">
+<li>Copy the app to /Applications, and launch it from there. You can only install System Extensions for apps launched from the /Applications folder.</li>
+</ol>
+</blockquote>
+<p>Yes. You need to copy the app to <code>/Applications</code> directory and run. If you run the app somewhere else, an error tips will show.</p>
+<blockquote>
+<ol start="5">
+<li>Click &ldquo;Install Extension&rdquo; and follow the prompts to allow the extension to launch.</li>
+</ol>
+</blockquote>
+<p>If you click <code>Install Extension</code> button in app, the textview below will show <code>Awaiting Approval ⏱ </code>. Then a system dialog will show which navigates you to the System Preferences and you need to give your approval.</p>
+<blockquote>
+<ol start="6">
+<li>In System Preferences, choose Security &amp; Privacy &gt; Privacy. Scroll to &ldquo;Full Disk Access&rdquo; and grant permission to use the extension.</li>
+</ol>
+</blockquote>
+<p>This step also is very import. If you miss this step, you will encounter problems like <code>OSStatus error -10811</code> or <code>Caller lacks TCC authorization for Full Disk Access</code>. So follow the step above and grant the <code>Full Disk Access</code> for our extension. The extension item shown in <code>Full Disk Access</code> panel has no name (I think this is an bug in macOS Ventura).
+<img src="/images/fda.jpg" alt=""></p>
+<blockquote>
+<ol start="7">
+<li>In Terminal, run systemextensionsctl list to verify that the system extension is activated.</li>
+<li>In Terminal, run sudo launchctl list <!-- raw HTML omitted -->.com.example.apple-samplecode.SampleEndpointApp.Extension to verify that the system extension is running.</li>
+</ol>
+</blockquote>
+<p>If you have done all the work above. The system extension will run normally and you can check by <code>sudo launchctl list | grep &lt;your bundle id&gt;</code> command. If you build <code>auth_demo.c</code>, the system <code>TextEdit.app</code> will be prevented to launch and you can&rsquo;t write to files in <code>/usr/local/bin</code> directory.</p>
+<h1 id="summay">Summay</h1>
+<p>I classify the problems I encounted into some categories.</p>
+<ol>
+<li><strong>Extension not found in App bundle.</strong></li>
+</ol>
+<p>If you see this error. Make sure the extension bundle id you built is the same with you set in code <code>ViewController.m</code>.</p>
+<ol start="2">
+<li><strong>Could not find service xxx.com.example.apple-samplecode.SampleEndpointApp.Extension in domain for system.</strong></li>
+</ol>
+<p>If you see this error. Firstly, make sure you have installed the extension. And then make sure your extension has set the Endpoint Security entitlement which we talked in step 2.</p>
+<ol start="3">
+<li><strong>Caller lacks TCC authorization for Full Disk Access.</strong></li>
+</ol>
+<p>See step 6.</p>
+<ol start="4">
+<li><strong>Extension not run or run with error Code Signature Invalid.</strong></li>
+</ol>
+<p>Make sure your extension has set the Endpoint Security entitlement which we talked in step 2.</p>
+
+</article>
+
+            </div>
+        </main>
+    </body></html>
