@@ -16,7 +16,7 @@
   
   
   
-  <link rel="stylesheet" href="/css/main.898435bf248def0b77b9c69aa78e3e86c2f242b660a1243911da1cf5b8acaa9e75d24f1f15b3a632ed7c18347d00ab316033c84be609de4fcece3c84d762df6e.css" integrity="sha512-iYQ1vySN7wt3ucaap44&#43;hsLyQrZgoSQ5Edoc9bisqp510k8fFbOmMu18GDR9AKsxYDPIS&#43;YJ3k/OzjyE12Lfbg==" />
+  <link rel="stylesheet" href="/css/main.6f43f46dfe96e8fc6985e06e8113fbf5b201c95e76eb9d91f395a4680f31e50e7f132434dbd26084814d168628a118ad76a77f4e81b1887bc9211bd8048ed363.css" integrity="sha512-b0P0bf6W6PxpheBugRP79bIByV52652R85WkaA8x5Q5/EyQ029JghIFNFoYooRitdqd/ToGxiHvJIRvYBI7TYw==" />
   
 </head>
 <body a="auto">
@@ -33,9 +33,9 @@
 
     <h1>Build &amp; Run WWDC2020-10159 SampleEndpointApp</h1>
 
-    <p>In <a href="https://developer.apple.com/videos/play/wwdc2020/10159/">WWDC2020 Session 10159</a> the speaker introduced us the <a href="https://developer.apple.com/documentation/endpointsecurity">Endpoint Security Framework</a>. The demo code <code>SampleEndpointApp</code> mentioned in the video can be downloaded <a href="https://docs-assets.developer.apple.com/published/67380d0c59/MonitoringSystemEventsWithEndpointSecurity.zip">here</a>. In this post, we will talk about how to build and run the demo on your computer. I have tried many times until the demo works normally. So I decide to write down the problems and solutions. Maybe this post can help someone else in the world.</p>
+    <p>In <a href="https://developer.apple.com/videos/play/wwdc2020/10159/">WWDC2020 Session 10159</a> the speaker introduced us the <a href="https://developer.apple.com/documentation/endpointsecurity">Endpoint Security Framework</a>. The demo code <strong>SampleEndpointApp</strong> mentioned in the video can be downloaded <a href="https://docs-assets.developer.apple.com/published/67380d0c59/MonitoringSystemEventsWithEndpointSecurity.zip">here</a>. In this post, we will talk about how to build and run the demo on your computer. I have tried many times until the demo works normally. So I decide to write down the problems and solutions. Maybe this post can help someone else in the world.</p>
 <h1 id="configuration">Configuration</h1>
-<p>There is a very useful <code>README.md</code> in the project root directory which you should read very carefully. If you miss any one step, you will be fail.</p>
+<p>There is a very useful <strong>README.md</strong> in the project root directory which you should read very carefully. If you miss any one step, you will be fail.</p>
 <blockquote>
 <ol>
 <li>Generate your Developer ID certificate. Refer to Developer ID for instructions.</li>
@@ -47,7 +47,7 @@
 <li>Request the Endpoint Security entitlement; see System Extensions and DriverKit.</li>
 </ol>
 </blockquote>
-<p>This step is critical. I spent one day before I realized that I missed this configuration. The system extension will not run if this entitlement is not set even through the extension is installed in system. So how to set this entitlement? First, visit the <a href="https://developer.apple.com/account/resources/identifiers/list">Apple develper</a> website and register a new <code>App ID</code>. You can set the <code>Bundle ID</code> with <code>com.example.apple-samplecode.SampleEndpointApp.Extension</code> as the document does, or you can set anything you like. In the <code>Capabilities</code> and <code>Additional Capabilities</code> tab, make sure you have the <code>System Extension</code> and <code>Endpoint Security</code> checkboxes checked.
+<p>This step is critical. I spent one day before I realized that I missed this configuration. The system extension will not run if this entitlement is not set even through the extension is installed in system. So how to set this entitlement? First, visit the <a href="https://developer.apple.com/account/resources/identifiers/list">Apple develper</a> website and register a new <strong>App ID</strong>. You can set the <strong>Bundle ID</strong> with <strong>com.example.apple-samplecode.SampleEndpointApp.Extension</strong> as the document does, or you can set anything you like. In the <strong>Capabilities</strong> and <strong>Additional Capabilities</strong> tab, make sure you have the <strong>System Extension</strong> and <strong>Endpoint Security</strong> checkboxes checked.
 <img src="/images/system-extension.jpg" alt="">
 <img src="/images/es.jpg" alt=""></p>
 <blockquote>
@@ -61,19 +61,19 @@
 <li>Copy the app to /Applications, and launch it from there. You can only install System Extensions for apps launched from the /Applications folder.</li>
 </ol>
 </blockquote>
-<p>Yes. You need to copy the app to <code>/Applications</code> directory and run. If you run the app somewhere else, an error tips will show.</p>
+<p>Yes. You need to copy the app to <strong>/Applications</strong> directory and run. If you run the app somewhere else, an error tips will show.</p>
 <blockquote>
 <ol start="5">
 <li>Click &ldquo;Install Extension&rdquo; and follow the prompts to allow the extension to launch.</li>
 </ol>
 </blockquote>
-<p>If you click <code>Install Extension</code> button in app, the textview below will show <code>Awaiting Approval ⏱ </code>. Then a system dialog will show which navigates you to the System Preferences and you need to give your approval.</p>
+<p>If you click <strong>Install Extension</strong> button in app, the textview below will show **Awaiting Approval ⏱ **. Then a system dialog will show which navigates you to the System Preferences and you need to give your approval.</p>
 <blockquote>
 <ol start="6">
 <li>In System Preferences, choose Security &amp; Privacy &gt; Privacy. Scroll to &ldquo;Full Disk Access&rdquo; and grant permission to use the extension.</li>
 </ol>
 </blockquote>
-<p>This step also is very import. If you miss this step, you will encounter problems like <code>OSStatus error -10811</code> or <code>Caller lacks TCC authorization for Full Disk Access</code>. So follow the step above and grant the <code>Full Disk Access</code> for our extension. The extension item shown in <code>Full Disk Access</code> panel has no name (I think this is an bug in macOS Ventura).
+<p>This step also is very import. If you miss this step, you will encounter problems like <strong>OSStatus error -10811</strong> or <strong>Caller lacks TCC authorization for Full Disk Access</strong>. So follow the step above and grant the <strong>Full Disk Access</strong> for our extension. The extension item shown in <strong>Full Disk Access</strong> panel has no name (I think this is an bug in macOS Ventura).
 <img src="/images/fda.jpg" alt=""></p>
 <blockquote>
 <ol start="7">
@@ -81,25 +81,25 @@
 <li>In Terminal, run sudo launchctl list <!-- raw HTML omitted -->.com.example.apple-samplecode.SampleEndpointApp.Extension to verify that the system extension is running.</li>
 </ol>
 </blockquote>
-<p>If you have done all the work above. The system extension will run normally and you can check by <code>sudo launchctl list | grep &lt;your bundle id&gt;</code> command. If you build <code>auth_demo.c</code>, the system <code>TextEdit.app</code> will be prevented to launch and you can&rsquo;t write to files in <code>/usr/local/bin</code> directory.</p>
+<p>If you have done all the work above. The system extension will run normally and you can check by <strong>sudo launchctl list | grep <!-- raw HTML omitted --></strong> command. If you build <strong>auth_demo.c</strong>, the system <strong>TextEdit.app</strong> will be prevented to launch and you can&rsquo;t write to files in <strong>/usr/local/bin</strong> directory.</p>
 <h1 id="summay">Summay</h1>
 <p>I classify the problems I encounted into some categories.</p>
 <ol>
 <li><strong>Extension not found in App bundle.</strong></li>
 </ol>
-<p>If you see this error. Make sure the extension bundle id you built is the same with you set in code <code>ViewController.m</code>.</p>
+<p>If you see this error. Make sure the extension bundle id you built is the same with you set in code <strong>ViewController.m</strong>.</p>
 <ol start="2">
 <li><strong>Could not find service xxx.com.example.apple-samplecode.SampleEndpointApp.Extension in domain for system.</strong></li>
 </ol>
-<p>If you see this error. Firstly, make sure you have installed the extension. And then make sure your extension has set the Endpoint Security entitlement which we talked in step 2.</p>
+<p>If you see this error. Firstly, make sure you have installed the extension. And then make sure your extension has set the Endpoint Security entitlement which we talked in step 2 of <strong>Configuration</strong> section.</p>
 <ol start="3">
 <li><strong>Caller lacks TCC authorization for Full Disk Access.</strong></li>
 </ol>
-<p>See step 6.</p>
+<p>See step 6 of <strong>Configuration</strong> section.</p>
 <ol start="4">
 <li><strong>Extension not run or run with error Code Signature Invalid.</strong></li>
 </ol>
-<p>Make sure your extension has set the Endpoint Security entitlement which we talked in step 2.</p>
+<p>Make sure your extension has set the Endpoint Security entitlement which we talked in step 2 of <strong>Configuration</strong> section.</p>
 
 </article>
 

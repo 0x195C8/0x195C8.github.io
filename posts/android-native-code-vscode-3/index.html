@@ -17,7 +17,7 @@ Run &amp; Debug Configruation If we click the Run and Debug button in the left S
   
   
   
-  <link rel="stylesheet" href="/css/main.898435bf248def0b77b9c69aa78e3e86c2f242b660a1243911da1cf5b8acaa9e75d24f1f15b3a632ed7c18347d00ab316033c84be609de4fcece3c84d762df6e.css" integrity="sha512-iYQ1vySN7wt3ucaap44&#43;hsLyQrZgoSQ5Edoc9bisqp510k8fFbOmMu18GDR9AKsxYDPIS&#43;YJ3k/OzjyE12Lfbg==" />
+  <link rel="stylesheet" href="/css/main.6f43f46dfe96e8fc6985e06e8113fbf5b201c95e76eb9d91f395a4680f31e50e7f132434dbd26084814d168628a118ad76a77f4e81b1887bc9211bd8048ed363.css" integrity="sha512-b0P0bf6W6PxpheBugRP79bIByV52652R85WkaA8x5Q5/EyQ029JghIFNFoYooRitdqd/ToGxiHvJIRvYBI7TYw==" />
   
 </head>
 <body a="auto">
@@ -36,10 +36,10 @@ Run &amp; Debug Configruation If we click the Run and Debug button in the left S
 
     <p>In previous two posts <a href="/posts/android-native-code-vscode-1">1</a> <a href="/posts/android-native-code-vscode-2">2</a> we have talked about how to edit Android native code in Visual Studio Code with code completions and how to build our project with Cmake Tools extension. In this post we will learn how to run and debug our program in Visual Studio Code, which is the last post of this topic.</p>
 <h2 id="run--debug-configruation">Run &amp; Debug Configruation</h2>
-<p>If we click the <code>Run and Debug</code> button in the left Side Bar, Visual Studio Code will tell us that he doesn&rsquo;t know how to run our program yet and we need to do some configurations before running our program.
+<p>If we click the <strong>Run and Debug</strong> button in the left Side Bar, Visual Studio Code will tell us that he doesn&rsquo;t know how to run our program yet and we need to do some configurations before running our program.
 <img src="/images/run-config.jpg" alt="">
-Follow the instructions in the panel we should create a <code>launch.json</code> file within our custom run and debug configurations should be presented.
-Add the following content to the <code>configurations</code> entry in <code>launch.json</code> file:</p>
+Follow the instructions in the panel we should create a <strong>launch.json</strong> file within our custom run and debug configurations should be presented.
+Add the following content to the <strong>configurations</strong> entry in <strong>launch.json</strong> file:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Android Native Debug&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;cppdbg&#34;</span>,
@@ -54,22 +54,22 @@ Add the following content to the <code>configurations</code> entry in <code>laun
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;MIMode&#34;</span>: <span style="color:#e6db74">&#34;gdb&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;miDebuggerServerAddress&#34;</span>: <span style="color:#e6db74">&#34;localhost:3880&#34;</span>
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>Let&rsquo;s explain some item in above snippet code. <code>name</code> refers our configuration&rsquo;s name which you can define something else. <code>program</code> is the cmake build output of our project. <code>miDebuggerPath</code> is the path to the debugger. Our debugger is <code>gdb</code> provided by Android NDK. If you want to learn all of the items which can be set, visit the offical <a href="https://code.visualstudio.com/docs/cpp/launch-json-reference">Configure C/C++ debugging</a> document.
-The last line <code>&quot;miDebuggerServerAddress&quot;: &quot;localhost:3880&quot;</code> seems strange at the first time. We will explain later. Recall the goal we metioned in <a href="/post/android-native-code-vscode-2.md">last post</a> that our program will compiled in our host laptop but will run in android devices remotely. So there should be a bridge that connects the local debug program and the remote running program.
-Here comes the <code>tasks.json</code> file. According to the Visual Studio Code offical document:</p>
+</span></span></code></pre></div><p>Let&rsquo;s explain some item in above snippet code. <strong>name</strong> refers our configuration&rsquo;s name which you can define something else. <strong>program</strong> is the cmake build output of our project. <strong>miDebuggerPath</strong> is the path to the debugger. Our debugger is <strong>gdb</strong> provided by Android NDK. If you want to learn all of the items which can be set, visit the offical <a href="https://code.visualstudio.com/docs/cpp/launch-json-reference">Configure C/C++ debugging</a> document.
+The last line <strong>&ldquo;miDebuggerServerAddress&rdquo;: &ldquo;localhost:3880&rdquo;</strong> seems strange at the first time. We will explain later. Recall the goal we metioned in <a href="/post/android-native-code-vscode-2.md">last post</a> that our program will compiled in our host laptop but will run in android devices remotely. So there should be a bridge that connects the local debug program and the remote running program.
+Here comes the <strong>tasks.json</strong> file. According to the Visual Studio Code offical document:</p>
 <blockquote>
 <p>Tasks in VS Code can be configured to run scripts and start processes so that many of these existing tools can be used from within VS Code without having to enter a command line or write new code. Workspace or folder specific tasks are configured from the tasks.json file in the .vscode folder for a workspace.</p>
 </blockquote>
 <p>We need to define some tasks to bridge the local debug program and the remote running program. Here is the tasks list.</p>
 <ol>
-<li>An task to push <code>gdbserver</code> in Android NDK to device.</li>
+<li>An task to push <strong>gdbserver</strong> in Android NDK to device.</li>
 <li>An task to push our complied program to device.</li>
-<li>An task to chmod the execution bit of <code>gdbserver</code>.</li>
+<li>An task to chmod the execution bit of <strong>gdbserver</strong>.</li>
 <li>An task to chmod the execution bit of our complied program.</li>
 <li>An task to forward local tcp port to remote tcp port</li>
-<li>An task to start our complied program in device with <code>gdbserver</code> for listening remote debug.</li>
+<li>An task to start our complied program in device with <strong>gdbserver</strong> for listening remote debug.</li>
 </ol>
-<p>The tasks should run in an order by their relations. Such as task 6 will run after others. Here is the final <code>tasks.json</code></p>
+<p>The tasks should run in an order by their relations. Such as task 6 will run after others. Here is the final <strong>tasks.json</strong></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;version&#34;</span>: <span style="color:#e6db74">&#34;2.0.0&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;tasks&#34;</span>: [
@@ -142,11 +142,11 @@ Here comes the <code>tasks.json</code> file. According to the Visual Studio Code
 </span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>    ]
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>At now, you may have fount out what <code>localhost:3880</code> means. Yes, we bridge the port 3880 on our local laptop to the port 3880 on device. So the local debugger can connect with the remote debuggee running on devices.</p>
+</span></span></code></pre></div><p>At now, you may have fount out what <strong>localhost:3880</strong> means. Yes, we bridge the port 3880 on our local laptop to the port 3880 on device. So the local debugger can connect with the remote debuggee running on devices.</p>
 <h2 id="run--debug">Run &amp; Debug</h2>
-<p>Now we have all the preparations done. To build our project, press <code>F7</code>. To debug our program, first run our custom bridge task (Open the Command Palette (⇧⌘P) and run the <code>Run task</code> and select our task named <code>Start program with gdbserver</code>),
+<p>Now we have all the preparations done. To build our project, press <strong>F7</strong>. To debug our program, first run our custom bridge task (Open the Command Palette (⇧⌘P) and run the <strong>Run task</strong> and select our task named <strong>Start program with gdbserver</strong>),
 <img src="/images/run-task.jpg" alt="">
-and then press <code>F5</code>, debugger will stop at your breakpoint.
+and then press <strong>F5</strong>, debugger will stop at your breakpoint.
 <img src="/images/run-debug.jpg" alt=""></p>
 <h2 id="summary">Summary</h2>
 <p>Congratulations! You have done all the work and you can edit, build, run, debug android native code in Visual Studio Code. You can find all the demo project files in <a href="https://github.com/0x195C8/android-native-code">here</a>. Feel free to ask me anything if you are in trouble.</p>
